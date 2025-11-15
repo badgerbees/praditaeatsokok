@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PraditaEats - Dashboard Penjual</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #1e3a5f 0%, #2d5a8f 100%);
+            color: white;
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        .logo-yellow {
+            color: #F2C94C;
+        }
+
+        .logo-subtitle {
+            font-size: 0.75rem;
+            font-weight: 400;
+            color: #F2C94C;
+            margin-left: 0.5rem;
+        }
+
+        .btn-logout {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-logout:hover {
+            background-color: #c82333;
+            transform: scale(1.05);
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1.5rem;
+        }
+
+        /* Tab Navigation */
+        .tab-navigation {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            background: white;
+            padding: 0.5rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 1rem;
+            background: transparent;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #666;
+        }
+
+        .tab-btn:hover {
+            background-color: #f8f9fa;
+        }
+
+        .tab-btn.active {
+            background-color: #F2C94C;
+            color: #1e3a5f;
+        }
+
+        /* Tab Content */
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Section Title */
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #1e3a5f;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid #F2C94C;
+            display: inline-block;
+        }
+
+        /* Orders Section */
+        .orders-container {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .order-status-section {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .status-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .status-icon {
+            font-size: 1.5rem;
+        }
+
+        .status-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #1e3a5f;
+        }
+
+        .status-count {
+            background-color: #F2C94C;
+            color: #1e3a5f;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-left: auto;
+        }
+
+        .order-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .order-card {
+            background: #f8f9fa;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 1.25rem;
+            transition: all 0.3s ease;
+        }
+
+        .order-card:hover {
+            border-color: #F2C94C;
+            box-shadow: 0 4px 12px rgba(242, 201, 76, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .order-id {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: #1e3a5f;
+        }
+
+        .order-customer {
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 0.2rem;
+        }
+
+        .order-time {
+            font-size: 0.85rem;
+            color: #888;
+            text-align: right;
+        }
+
+        .order-items {
+            background: white;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .order-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .order-item:last-child {
+            border-bottom: none;
+        }
+
+        .item-name {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .item-qty {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .order-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1rem;
+            border-top: 2px solid #e0e0e0;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .order-info-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+        }
+
+        .order-total {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: #1e3a5f;
+        }
+
+        .payment-method {
+            font-size: 0.85rem;
+            padding: 0.3rem 0.7rem;
+            border-radius: 15px;
+            font-weight: 600;
+        }
+
+        .payment-method.cashless {
+            background-color: #e7f3ff;
+            color: #0066cc;
+        }
+
+        .payment-method.tunai {
+            background-color: #fff3e0;
+            color: #e65100;
+        }
+
+        .order-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-action {
+            padding: 0.7rem 1.3rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background-color: #F2C94C;
+            color: #1e3a5f;
+        }
+
+        .btn-primary:hover {
+            background-color: #e0b840;
+            transform: scale(1.05);
+        }
+
+        .btn-success {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background-color: #218838;
+        }
+
+        .btn-info {
+            background-color: #17a2b8;
+            color: white;
+        }
+
+        .btn-info:hover {
+            background-color: #138496;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+
+        /* Report Section */
+        .report-container {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .summary-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+
+        .summary-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+        }
+
+        .summary-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+        }
+
+        .summary-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .summary-label {
+            font-size: 0.9rem;
+            color: #888;
+            margin-bottom: 0.5rem;
+        }
+
+        .summary-value {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #1e3a5f;
+        }
+
+        .top-menu-section {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .top-menu-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .menu-item:hover {
+            background-color: #e9ecef;
+            transform: translateX(5px);
+        }
+
+        .menu-rank {
+            background-color: #F2C94C;
+            color: #1e3a5f;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 1.1rem;
+        }
+
+        .menu-placeholder {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .menu-details {
+            flex: 1;
+        }
+
+        .menu-name {
+            font-weight: 700;
+            color: #1e3a5f;
+            margin-bottom: 0.2rem;
+        }
+
+        .menu-sales {
+            font-size: 0.85rem;
+            color: #666;
+        }
+
+        .menu-revenue {
+            font-weight: 700;
+            color: #F2C94C;
+            font-size: 1.1rem;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: #888;
+        }
+
+        .empty-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .empty-text {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .tab-navigation {
+                flex-direction: column;
+            }
+
+            .order-footer {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .order-actions {
+                width: 100%;
+                flex-direction: column;
+            }
+
+            .btn-action {
+                width: 100%;
+            }
+
+            .summary-cards {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="logo">
+            Pradita<span class="logo-yellow">Eats</span>
+            <span class="logo-subtitle">— Penjual</span>
+        </div>
+        <button class="btn-logout">Logout</button>
+    </header>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Tab Navigation -->
+        <div class="tab-navigation">
+            <button class="tab-btn active" onclick="this.parentElement.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active')); this.classList.add('active'); document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active')); document.getElementById('tab-pesanan').classList.add('active');">
+                📦 Tab Pesanan
+            </button>
+            <button class="tab-btn" onclick="this.parentElement.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active')); this.classList.add('active'); document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active')); document.getElementById('tab-laporan').classList.add('active');">
+                📊 Tab Laporan
+            </button>
+        </div>
+
+        <!-- TAB PESANAN -->
+        <div id="tab-pesanan" class="tab-content active">
+            <div class="orders-container">
+                
+                <!-- Menunggu Konfirmasi -->
+                <div class="order-status-section">
+                    <div class="status-header">
+                        <span class="status-icon">⏳</span>
+                        <h3 class="status-title">Menunggu Konfirmasi</h3>
+                        <span class="status-count">2</span>
+                    </div>
+                    
+                    <div class="order-list">
+                        <div class="order-card">
+                            <div class="order-header">
+                                <div>
+                                    <div class="order-id">#ORD-2024-105</div>
+                                    <div class="order-customer">👤 Budi Santoso</div>
+                                </div>
+                                <div class="order-time">
+                                    🕐 5 menit yang lalu<br>
+                                    11:25 WIB
+                                </div>
+                            </div>
+                            
+                            <div class="order-items">
+                                <div class="order-item">
+                                    <span class="item-name">Ayam Geprek Sambal Matah</span>
+                                    <span class="item-qty">x2</span>
+                                </div>
+                                <div class="order-item">
+                                    <span class="item-name">Es Teh Manis</span>
+                                    <span class="item-qty">x2</span>
+                                </div>
+                            </div>
+
+                            <div class="order-footer">
+                                <div class="order-info-group">
+                                    <div class="order-total">Rp 46.000</div>
+                                    <span class="payment-method cashless">💳 QRIS/Cashless</span>
+                                </div>
+                                <div class="order-actions">
+                                    <button class="btn-action btn-success">✓ Terima Pesanan</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="order-card">
+                            <div class="order-header">
+                                <div>
+                                    <div class="order-id">#ORD-2024-106</div>
+                                    <div class="order-customer">👤 Siti Aminah</div>
+                                </div>
+                                <div class="order-time">
+                                    🕐 2 menit yang lalu<br>
+                                    11:28 WIB
+                                </div>
+                            </div>
+                            
+                            <div class="order-items">
+                                <div class="order-item">
+                                    <span class="item-name">Nasi Goreng Spesial</span>
+                                    <span class="item-qty">x1</span>
+                                </div>
+                                <div class="order-item">
+                                    <span class="item-name">Teh Panas</span>
+                                    <span class="item-qty">x1</span>
+                                </div>
+                            </div>
+
+                            <div class="order-footer">
+                                <div class="order-info-group">
+                                    <div class="order-total">Rp 18.000</div>
+                                    <span class="payment-method tunai">💵 Tunai</span>
+                                </div>
+                                <div class="order-actions">
+                                    <button class="btn-action btn-success">✓ Terima Pesanan</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sedang Diproses -->
+                <div class="order-status-section">
+                    <div class="status-header">
+                        <span class="status-icon">👨‍🍳</span>
+                        <h3 class="status-title">Sedang Diproses</h3>
+                        <span class="status-count">1</span>
+                    </div>
+                    
+                    <div class="order-list">
+                        <div class="order-card">
+                            <div class="order-header">
+                                <div>
+                                    <div class="order-id">#ORD-2024-104</div>
+                                    <div class="order-customer">👤 Ahmad Rifai</div>
+                                </div>
+                                <div class="order-time">
+                                    🕐 15 menit yang lalu<br>
+                                    11:15 WIB
+                                </div>
+                            </div>
+                            
+                            <div class="order-items">
+                                <div class="order-item">
+                                    <span class="item-name">Ayam Geprek Keju</span>
+                                    <span class="item-qty">x3</span>
+                                </div>
+                                <div class="order-item">
+                                    <span class="item-name">Es Jeruk</span>
+                                    <span class="item-qty">x3</span>
+                                </div>
+                                <div class="order-item">
+                                    <span class="item-name">Nasi Putih Extra</span>
+                                    <span class="item-qty">x1</span>
+                                </div>
+                            </div>
+
+                            <div class="order-footer">
+                                <div class="order-info-group">
+                                    <div class="order-total">Rp 72.000</div>
+                                    <span class="payment-method cashless">💳 QRIS/Cashless</span>
+                                </div>
+                                <div class="order-actions">
+                                    <button class="btn-action btn-info">✓ Tandai Siap Diambil</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Siap Diambil -->
+                <div class="order-status-section">
+                    <div class="status-header">
+                        <span class="status-icon">✅</span>
+                        <h3 class="status-title">Siap Diambil</h3>
+                        <span class="status-count">1</span>
+                    </div>
+                    
+                    <div class="order-list">
+                        <div class="order-card">
+                            <div class="order-header">
+                                <div>
+                                    <div class="order-id">#ORD-2024-103</div>
+                                    <div class="order-customer">👤 Dewi Lestari</div>
+                                </div>
+                                <div class="order-time">
+                                    🕐 8 menit yang lalu<br>
+                                    11:22 WIB
+                                </div>
+                            </div>
+                            
+                            <div class="order-items">
+                                <div class="order-item">
+                                    <span class="item-name">Paket Hemat Siang</span>
+                                    <span class="item-qty">x2</span>
+                                </div>
+                                <div class="order-item">
+                                    <span class="item-name">Es Teh Manis</span>
+                                    <span class="item-qty">x2</span>
+                                </div>
+                            </div>
+
+                            <div class="order-footer">
+                                <div class="order-info-group">
+                                    <div class="order-total">Rp 50.000</div>
+                                    <span class="payment-method tunai">💵 Tunai</span>
+                                </div>
+                                <div class="order-actions">
+                                    <button class="btn-action btn-primary">✓ Tandai Selesai</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pesanan Selesai -->
+                <div class="order-status-section">
+                    <div class="status-header">
+                        <span class="status-icon">🎉</span>
+                        <h3 class="status-title">Pesanan Selesai</h3>
+                        <span class="status-count">24</span>
+                    </div>
+                    
+                    <div class="order-list">
+                        <div class="order-card">
+                            <div class="order-header">
+                                <div>
+                                    <div class="order-id">#ORD-2024-102</div>
+                                    <div class="order-customer">👤 Rina Susanti</div>
+                                </div>
+                                <div class="order-time">
+                                    🕐 1 jam yang lalu<br>
+                                    10:30 WIB
+                                </div>
+                            </div>
+                            
+                            <div class="order-items">
+                                <div class="order-item">
+                                    <span class="item-name">Ayam Geprek Original</span>
+                                    <span class="item-qty">x1</span>
+                                </div>
+                                <div class="order-item">
+                                    <span class="item-name">Kopi Susu</span>
+                                    <span class="item-qty">x1</span>
+                                </div>
+                            </div>
+
+                            <div class="order-footer">
+                                <div class="order-info-group">
+                                    <div class="order-total">Rp 27.000</div>
+                                    <span class="payment-method cashless">💳 QRIS/Cashless</span>
+                                </div>
+                                <div class="order-actions">
+                                    <button class="btn-action btn-secondary" disabled>Selesai</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="order-card">
+                            <div class="order-header">
+                                <div>
+                                    <div class="order-id">#ORD-2024-101</div>
+                                    <div class="order-customer">👤 Joko Widodo</div>
+                                </div>
+                                <div class="order-time">
+                                    🕐 2 jam yang lalu<br>
+                                    09:45 WIB
+                                </div>
+                            </div>
+                            
+                            <div class="order-items">
+                                <div class="order-item">
+                                    <span class="item-name">Mie Ayam Komplit</span>
+                                    <span class="item-qty">x2</span>
+                                </div>
+                            </div>
+
+                            <div class="order-footer">
+                                <div class="order-info-group">
+                                    <div class="order-total">Rp 26.000</div>
+                                    <span class="payment-method tunai">💵 Tunai</span>
+                                </div>
+                                <div class="order-actions">
+                                    <button class="btn-action btn-secondary" disabled>Selesai</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- TAB LAPORAN -->
+        <div id="tab-laporan" class="tab-content">
+            <div class="report-container">
+                
+                <!-- Summary Cards -->
+                <h3 class="section-title">Ringkasan Hari Ini</h3>
+                <div class="summary-cards">
+                    <div class="summary-card">
+                        <div class="summary-icon">📦</div>
+                        <div class="summary-label">Jumlah Pesanan Hari Ini</div>
+                        <div class="summary-value">28</div>
+                    </div>
+                    
+                    <div class="summary-card">
+                        <div class="summary-icon">💰</div>
+                        <div class="summary-label">Total Pendapatan Hari Ini</div>
+                        <div class="summary-value">Rp 504K</div>
+                    </div>
+                </div>
+
+                <!-- Top 5 Menu -->
+                <div class="top-menu-section">
+                    <h3 class="section-title">Top 5 Menu Terlaris</h3>
+                    <div class="top-menu-list">
+                        
+                        <div class="menu-item">
+                            <div class="menu-rank">1</div>
+                            <div class="menu-placeholder">🍗</div>
+                            <div class="menu-details">
+                                <div class="menu-name">Ayam Geprek Sambal Matah</div>
+                                <div class="menu-sales">Terjual: 12 porsi</div>
+                            </div>
+                            <div class="menu-revenue">Rp 216K</div>
+                        </div>
+
+                        <div class="menu-item">
+                            <div class="menu-rank">2</div>
+                            <div class="menu-placeholder">🧀</div>
+                            <div class="menu-details">
+                                <div class="menu-name">Ayam Geprek Keju</div>
+                                <div class="menu-sales">Terjual: 8 porsi</div>
+                            </div>
+                            <div class="menu-revenue">Rp 160K</div>
+                        </div>
+
+                        <div class="menu-item">
+                            <div class="menu-rank">3</div>
+                            <div class="menu-placeholder">🍗</div>
+                            <div class="menu-details">
+                                <div class="menu-name">Ayam Geprek Original</div>
+                                <div class="menu-sales">Terjual: 6 porsi</div>
+                            </div>
+                            <div class="menu-revenue">Rp 90K</div>
+                        </div>
+
+                        <div class="menu-item">
+                            <div class="menu-rank">4</div>
+                            <div class="menu-placeholder">🍱</div>
+                            <div class="menu-details">
+                                <div class="menu-name">Paket Hemat Siang</div>
+                                <div class="menu-sales">Terjual: 4 porsi</div>
+                            </div>
+                            <div class="menu-revenue">Rp 80K</div>
+                        </div>
+
+                        <div class="menu-item">
+                            <div class="menu-rank">5</div>
+                            <div class="menu-placeholder">☕</div>
+                            <div class="menu-details">
+                                <div class="menu-name">Kopi Susu Gula Aren</div>
+                                <div class="menu-sales">Terjual: 10 cup</div>
+                            </div>
+                            <div class="menu-revenue">Rp 120K</div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+</body>
+</html>
