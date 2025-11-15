@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PraditaEats - Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #1e3a5f 0%, #2d5a8f 100%);
+            color: white;
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        .logo-yellow {
+            color: #F2C94C;
+        }
+
+        .profile-icon {
+            width: 40px;
+            height: 40px;
+            background-color: #F2C94C;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1.5rem;
+            padding-bottom: 80px;
+        }
+
+        /* Greeting */
+        .greeting {
+            margin-bottom: 1.5rem;
+        }
+
+        .greeting h2 {
+            font-size: 1.5rem;
+            color: #1e3a5f;
+            margin-bottom: 0.3rem;
+        }
+
+        .greeting p {
+            color: #666;
+            font-size: 0.95rem;
+        }
+
+        /* Mode Selection */
+        .mode-section {
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #1e3a5f;
+            margin-bottom: 1rem;
+        }
+
+        .mode-cards {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .mode-card {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .mode-card:hover {
+            border-color: #F2C94C;
+            box-shadow: 0 4px 12px rgba(242, 201, 76, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .mode-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .mode-card h3 {
+            font-size: 1.1rem;
+            color: #1e3a5f;
+            margin-bottom: 0.3rem;
+        }
+
+        .mode-card p {
+            font-size: 0.85rem;
+            color: #888;
+        }
+
+        /* Search Bar */
+        .search-section {
+            margin-bottom: 2rem;
+        }
+
+        .search-bar {
+            position: relative;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 1rem 1rem 1rem 3rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .search-bar input:focus {
+            outline: none;
+            border-color: #F2C94C;
+            box-shadow: 0 0 0 3px rgba(242, 201, 76, 0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.2rem;
+            color: #888;
+        }
+
+        /* Category Section */
+        .category-section {
+            margin-bottom: 2rem;
+        }
+
+        .category-scroll {
+            display: flex;
+            gap: 1rem;
+            overflow-x: auto;
+            padding-bottom: 0.5rem;
+            scrollbar-width: thin;
+            scrollbar-color: #F2C94C #f0f0f0;
+        }
+
+        .category-scroll::-webkit-scrollbar {
+            height: 6px;
+        }
+
+        .category-scroll::-webkit-scrollbar-track {
+            background: #f0f0f0;
+            border-radius: 10px;
+        }
+
+        .category-scroll::-webkit-scrollbar-thumb {
+            background: #F2C94C;
+            border-radius: 10px;
+        }
+
+        .category-card {
+            min-width: 120px;
+            background: white;
+            border-radius: 12px;
+            padding: 1rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+        }
+
+        .category-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .category-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .category-card p {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #333;
+        }
+
+        /* Tenant Section */
+        .tenant-section {
+            margin-bottom: 2rem;
+        }
+
+        .tenant-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1rem;
+        }
+
+        .tenant-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .tenant-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+        }
+
+        .img-placeholder {
+            width: 100%;
+            height: 160px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+        }
+
+        .tenant-info {
+            padding: 1rem;
+        }
+
+        .tenant-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 0.5rem;
+        }
+
+        .tenant-name {
+            font-weight: 700;
+            font-size: 1.05rem;
+            color: #1e3a5f;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .status.open {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .status.closed {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .tenant-rating {
+            color: #F2C94C;
+            font-size: 0.9rem;
+            margin-top: 0.3rem;
+        }
+
+        /* Menu Section */
+        .menu-section {
+            margin-bottom: 2rem;
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+
+        .menu-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+        }
+
+        .menu-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+        }
+
+        .menu-card .img-placeholder {
+            height: 140px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .menu-info {
+            padding: 1rem;
+        }
+
+        .menu-name {
+            font-weight: 700;
+            font-size: 1rem;
+            color: #333;
+            margin-bottom: 0.3rem;
+        }
+
+        .menu-tenant {
+            font-size: 0.85rem;
+            color: #888;
+            margin-bottom: 0.5rem;
+        }
+
+        .menu-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 0.75rem;
+        }
+
+        .menu-price {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: #1e3a5f;
+        }
+
+        .btn-order {
+            background-color: #F2C94C;
+            color: #1e3a5f;
+            border: none;
+            padding: 0.5rem 1.25rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-order:hover {
+            background-color: #e0b840;
+            transform: scale(1.05);
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-around;
+            padding: 0.75rem 0;
+            z-index: 100;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.25rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+        }
+
+        .nav-item:hover {
+            background-color: #f8f9fa;
+        }
+
+        .nav-item.active {
+            color: #F2C94C;
+        }
+
+        .nav-icon {
+            font-size: 1.5rem;
+        }
+
+        .nav-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .mode-cards {
+                grid-template-columns: 1fr;
+            }
+
+            .tenant-grid,
+            .menu-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .greeting h2 {
+                font-size: 1.3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="logo">
+            Pradita<span class="logo-yellow">Eats</span>
+        </div>
+        <div class="profile-icon">👤</div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Greeting -->
+        <div class="greeting">
+            <h2>Halo, Mahasiswa! 👋</h2>
+            <p>Mau makan apa hari ini?</p>
+        </div>
+
+        <!-- Mode Selection -->
+        <section class="mode-section">
+            <h3 class="section-title">Pilih Mode Pemesanan</h3>
+            <div class="mode-cards">
+                <div class="mode-card">
+                    <div class="mode-icon">🛍️</div>
+                    <h3>Take Away</h3>
+                    <p>Pesan & ambil sendiri</p>
+                </div>
+                <div class="mode-card">
+                    <div class="mode-icon">🍽️</div>
+                    <h3>Dine In</h3>
+                    <p>Makan di tempat</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Search Bar -->
+        <section class="search-section">
+            <div class="search-bar">
+                <span class="search-icon">🔍</span>
+                <input type="text" placeholder="Cari menu atau tenant...">
+            </div>
+        </section>
+
+        <!-- Category -->
+        <section class="category-section">
+            <h3 class="section-title">Kategori</h3>
+            <div class="category-scroll">
+                <div class="category-card">
+                    <div class="category-icon">🍚</div>
+                    <p>Makanan</p>
+                </div>
+                <div class="category-card">
+                    <div class="category-icon">🥤</div>
+                    <p>Minuman</p>
+                </div>
+                <div class="category-card">
+                    <div class="category-icon">🍪</div>
+                    <p>Snack</p>
+                </div>
+                <div class="category-card">
+                    <div class="category-icon">💰</div>
+                    <p>Paket Hemat</p>
+                </div>
+                <div class="category-card">
+                    <div class="category-icon">✨</div>
+                    <p>Lainnya</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tenant List -->
+        <section class="tenant-section">
+            <h3 class="section-title">Tenant Kantin</h3>
+            <div class="tenant-grid">
+                <div class="tenant-card">
+                    <div class="img-placeholder">🍗</div>
+                    <div class="tenant-info">
+                        <div class="tenant-header">
+                            <div>
+                                <div class="tenant-name">Ayam Geprek Mas Bro</div>
+                                <div class="tenant-rating">⭐ 4.8 (120+ rating)</div>
+                            </div>
+                            <span class="status open">Buka</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="tenant-card">
+                    <div class="img-placeholder">🍲</div>
+                    <div class="tenant-info">
+                        <div class="tenant-header">
+                            <div>
+                                <div class="tenant-name">Kantin Bu Wati</div>
+                                <div class="tenant-rating">⭐ 4.9 (200+ rating)</div>
+                            </div>
+                            <span class="status open">Buka</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="tenant-card">
+                    <div class="img-placeholder">☕</div>
+                    <div class="tenant-info">
+                        <div class="tenant-header">
+                            <div>
+                                <div class="tenant-name">Kopi Kampus</div>
+                                <div class="tenant-rating">⭐ 4.7 (85+ rating)</div>
+                            </div>
+                            <span class="status open">Buka</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="tenant-card">
+                    <div class="img-placeholder">🍜</div>
+                    <div class="tenant-info">
+                        <div class="tenant-header">
+                            <div>
+                                <div class="tenant-name">Mie Ayam Bang Ucup</div>
+                                <div class="tenant-rating">⭐ 4.6 (95+ rating)</div>
+                            </div>
+                            <span class="status closed">Tutup</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Popular Menu -->
+        <section class="menu-section">
+            <h3 class="section-title">Menu Populer</h3>
+            <div class="menu-grid">
+                <div class="menu-card">
+                    <div class="img-placeholder">🍗</div>
+                    <div class="menu-info">
+                        <div class="menu-name">Ayam Geprek Sambal Matah</div>
+                        <div class="menu-tenant">Ayam Geprek Mas Bro</div>
+                        <div class="menu-footer">
+                            <div class="menu-price">Rp 18.000</div>
+                            <button class="btn-order">Pesan</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="menu-card">
+                    <div class="img-placeholder">🍛</div>
+                    <div class="menu-info">
+                        <div class="menu-name">Nasi Goreng Spesial</div>
+                        <div class="menu-tenant">Kantin Bu Wati</div>
+                        <div class="menu-footer">
+                            <div class="menu-price">Rp 15.000</div>
+                            <button class="btn-order">Pesan</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="menu-card">
+                    <div class="img-placeholder">☕</div>
+                    <div class="menu-info">
+                        <div class="menu-name">Kopi Susu Gula Aren</div>
+                        <div class="menu-tenant">Kopi Kampus</div>
+                        <div class="menu-footer">
+                            <div class="menu-price">Rp 12.000</div>
+                            <button class="btn-order">Pesan</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="menu-card">
+                    <div class="img-placeholder">🍜</div>
+                    <div class="menu-info">
+                        <div class="menu-name">Mie Ayam Komplit</div>
+                        <div class="menu-tenant">Mie Ayam Bang Ucup</div>
+                        <div class="menu-footer">
+                            <div class="menu-price">Rp 13.000</div>
+                            <button class="btn-order">Pesan</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="menu-card">
+                    <div class="img-placeholder">🍱</div>
+                    <div class="menu-info">
+                        <div class="menu-name">Paket Hemat Siang</div>
+                        <div class="menu-tenant">Kantin Bu Wati</div>
+                        <div class="menu-footer">
+                            <div class="menu-price">Rp 20.000</div>
+                            <button class="btn-order">Pesan</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="menu-card">
+                    <div class="img-placeholder">🧃</div>
+                    <div class="menu-info">
+                        <div class="menu-name">Es Teh Manis Jumbo</div>
+                        <div class="menu-tenant">Kopi Kampus</div>
+                        <div class="menu-footer">
+                            <div class="menu-price">Rp 5.000</div>
+                            <button class="btn-order">Pesan</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <div class="nav-item active">
+            <div class="nav-icon">🏠</div>
+            <div class="nav-label">Home</div>
+        </div>
+        <div class="nav-item">
+            <div class="nav-icon">📋</div>
+            <div class="nav-label">Pesanan Saya</div>
+        </div>
+        <div class="nav-item">
+            <div class="nav-icon">💳</div>
+            <div class="nav-label">Pembayaran</div>
+        </div>
+        <div class="nav-item">
+            <div class="nav-icon">👤</div>
+            <div class="nav-label">Akun</div>
+        </div>
+    </nav>
+</body>
+</html>
